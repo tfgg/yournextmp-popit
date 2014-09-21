@@ -222,7 +222,7 @@ class PopItPerson(object):
 
     def party_and_candidate_lists_iter(self):
         for m in self.popit_data['memberships']:
-            o = self.api.organizations(m['organization_id']).get()['result']
+            o = self.api.organizations(m['organization_id']).get(embed='')['result']
             if o['classification'] in ('Party', 'Candidate List'):
                 yield m, o
 
