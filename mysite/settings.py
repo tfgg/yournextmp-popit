@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 import os
 import sys
+from urlparse import urlunsplit
 import yaml
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -31,6 +32,18 @@ POPIT_PORT = conf.get('POPIT_PORT', 80)
 POPIT_USER = conf.get('POPIT_USER', '')
 POPIT_PASSWORD = conf.get('POPIT_PASSWORD', '')
 POPIT_API_KEY = conf.get('POPIT_API_KEY', '')
+
+def _get_popit_api_base_url():
+    port = POPIT_PORT
+    instance_hostname = POPIT_INSTANCE + '.' + POPIT_HOSTNAME
+    if port != 80:
+        instance_hostname += ':' + str(port)
+    base_url = urlunsplit(
+        ('http', instance_hostname, '/api/v0.1/', '', '')
+    )
+    return base_url
+
+POPIT_API_BASE_URL = _get_popit_api_base_url()
 
 # Email addresses that error emails are sent to when DEBUG = False
 ADMINS = conf['ADMINS']
